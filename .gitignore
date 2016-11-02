@@ -1,0 +1,13 @@
+/target
+/classes
+/checkouts
+pom.xml
+pom.xml.asc
+/.lein-*
+/.nrepl-port
+.idea
+.DS_Store
+*.iml
+/gradle-tools/*.properties
+figwheel_server.log
+/.cljs_rhino_repl
