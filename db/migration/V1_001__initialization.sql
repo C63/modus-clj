@@ -5,3 +5,5 @@ begin
   return new;
 end;
 $$ language 'plpgsql';
+
+create extension if not exists pgcrypto;

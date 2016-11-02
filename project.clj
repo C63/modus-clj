@@ -21,7 +21,7 @@
                  [ring-middleware-format "0.7.0"]
                  [cheshire "5.6.3"]
                  [metosin/ring-http-response "0.8.0"]
-                 ]
+                 [com.layerware/hugsql "0.4.7"]]
   :source-paths ["src"]
   :main modus.main
   :plugins [[lein-ring "0.9.7"]
@@ -43,8 +43,8 @@
                        :jvm-opts     ["-Dapple.awt.UIElement=true"
                                       "-DLISTEN_PORT=3000"]
                        :flyway       {:url      "jdbc:postgresql://localhost:5432/modus"
-                                      :user     "modus"
-                                      :password "modus"}
+                                      :user     ~(System/getProperty "user.name")
+                                      :password ""}
                        }
              :uberjar {:aot :all}
              }

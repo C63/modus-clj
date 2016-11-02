@@ -8,8 +8,8 @@ case "$profile" in
   dev)
     database=modus
     host=localhost
-    username=modus
-    password=modus
+    username=$(whoami)
+    password=
     lein_profile=dev
     ;;
   *)

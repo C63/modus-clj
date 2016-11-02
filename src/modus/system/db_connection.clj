@@ -3,7 +3,8 @@
             [clojure.tools.logging :as log]
             [modus.misc.config :refer [int-system-property]]
             [modus.misc.util :refer [->kebab-case]])
-  (:import (com.zaxxer.hikari HikariDataSource)))
+  (:import (com.zaxxer.hikari HikariDataSource)
+           (org.postgresql.util PSQLException)))
 
 (defn db-pool [{:keys [url username password max-pool-size]}]
   (let [ds (doto (HikariDataSource.)
@@ -45,3 +46,8 @@
 
 (defn new-db-connections []
   (map->DBConnections {}))
+
+(defn is-unique-violation?
+  [e]
+  (when (instance? PSQLException e)
+    (= "23505" (.getSQLState ^PSQLException e))))
