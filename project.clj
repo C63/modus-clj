@@ -11,6 +11,7 @@
                  [org.postgresql/postgresql "9.4.1211"]
                  [com.zaxxer/HikariCP "2.5.1"]
                  [org.clojure/java.jdbc "0.6.1"]
+                 [buddy "1.1.0"]
                  [org.mindrot/jbcrypt "0.3m"]
                  [compojure "1.5.1"]
                  [org.clojure/tools.logging "0.3.1"]
@@ -21,9 +22,10 @@
                  [ring-middleware-format "0.7.0"]
                  [cheshire "5.6.3"]
                  [metosin/ring-http-response "0.8.0"]
-                 [com.layerware/hugsql "0.4.7"]]
+                 [com.layerware/hugsql "0.4.7"]
+                 [prismatic/schema "1.1.3"]
+                 [environ "1.1.0"]]
   :source-paths ["src"]
-  :main modus.main
   :plugins [[lein-ring "0.9.7"]
             [lein-figwheel "0.5.8"
              :exclusions [org.clojure/clojure org.clojure/tools.reader ring/ring-core]]

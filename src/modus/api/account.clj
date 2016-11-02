@@ -1,1 +1,5 @@
-(ns modus.api.account)
+(ns modus.api.account
+  )
+
+(defn register-account
+  [accounts {:keys}])

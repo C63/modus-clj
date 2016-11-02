@@ -22,3 +22,4 @@ echo "select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity wh
 dropdb --host $host --username $username $database
 createdb --host $host --username $username $database
 lein with-profile $lein_profile flyway migrate
+lein run -m modus.main/-main

@@ -1,36 +1,14 @@
 # modus
 
-FIXME: description
+modus monolith backend with clojure and postgres
 
-## Installation
+## Installation (Instruction for Chi - or noob like Chi)
 
-Download from http://example.com/FIXME.
+* Install postgres: http://postgresapp.com/
+* Install leiningen: http://leiningen.org/#install
 
 ## Usage
 
-FIXME: explanation
-
-    $ java -jar modus-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
-## License
-
-Copyright © 2016 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+* Want to recreate the whole database: ./bootstrap.sh
+* Want to run normally: ./run.sh
+* Dev: use repl - of course
