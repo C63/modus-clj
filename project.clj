@@ -12,8 +12,12 @@
                  [com.zaxxer/HikariCP "2.5.1"]
                  [org.clojure/java.jdbc "0.6.1"]
                  [org.mindrot/jbcrypt "0.3m"]
-                 [compojure "1.5.1"]]
+                 [compojure "1.5.1"]
+                 [org.clojure/tools.logging "0.3.1"]
+                 [metosin/compojure-api "1.1.9"]
+                 ]
   :source-paths ["src"]
+  :main modus.main
   :plugins [[lein-ring "0.9.7"]
             [lein-figwheel "0.5.8"
              :exclusions [org.clojure/clojure org.clojure/tools.reader ring/ring-core]]
