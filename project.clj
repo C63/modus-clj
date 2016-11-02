@@ -42,8 +42,8 @@
                        :jvm-opts     ["-Dapple.awt.UIElement=true"
                                       "-DLISTEN_PORT=3000"]
                        :flyway       {:url      "jdbc:postgresql://localhost:5432/modus"
-                                      :user     ~(System/getProperty "user.name")
-                                      :password ""}
+                                      :user     "modus"
+                                      :password "modus"}
                        }
              :uberjar {:aot :all}
              }
