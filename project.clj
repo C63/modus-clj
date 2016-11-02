@@ -20,6 +20,7 @@
                   :exclusions [org.apache.httpcomponents/httpcore]]
                  [ring-middleware-format "0.7.0"]
                  [cheshire "5.6.3"]
+                 [metosin/ring-http-response "0.8.0"]
                  ]
   :source-paths ["src"]
   :main modus.main

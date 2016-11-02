@@ -10,7 +10,3 @@
       (Boolean/parseBoolean)))
 
 (def listen-port (int-system-property "LISTEN_PORT" 8080))
-
-(def dev-mode? (boolean-system-property "DEV_MODE" true))
-
-(def secure-site? (boolean-system-property "SECURE_SITE" false))
