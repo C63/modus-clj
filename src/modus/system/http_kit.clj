@@ -2,11 +2,12 @@
   (:require [com.stuartsierra.component :as component]
             [org.httpkit.server :as httpkit]
             [clojure.tools.logging :as log]
+            [modus.misc.config :as config]
             ))
 
 (defn- run-server [web-app]
   (let [resp (httpkit/run-server (:routes web-app)
-                                 {:port   8080
+                                 {:port   config/listen-port
                                   :thread 500})]
     (log/info "http-kit start")
     resp))

@@ -14,7 +14,12 @@
                  [org.mindrot/jbcrypt "0.3m"]
                  [compojure "1.5.1"]
                  [org.clojure/tools.logging "0.3.1"]
-                 [metosin/compojure-api "1.1.9"]
+                 [camel-snake-kebab "0.4.0"]
+                 [clj-time "0.12.1"]
+                 [clj-http "3.3.0"
+                  :exclusions [org.apache.httpcomponents/httpcore]]
+                 [ring-middleware-format "0.7.0"]
+                 [cheshire "5.6.3"]
                  ]
   :source-paths ["src"]
   :main modus.main
@@ -34,6 +39,8 @@
                                       [org.clojure/tools.nrepl "0.2.12"]
                                       [org.clojure/test.check "0.9.0"]]
                        :source-paths ["dev"]
+                       :jvm-opts     ["-Dapple.awt.UIElement=true"
+                                      "-DLISTEN_PORT=3000"]
                        :flyway       {:url      "jdbc:postgresql://localhost:5432/modus"
                                       :user     ~(System/getProperty "user.name")
                                       :password ""}
