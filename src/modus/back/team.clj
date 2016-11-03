@@ -10,6 +10,8 @@
   (with-db-transaction
     [tx (datasource db-conn)]
     (let [team-id (generate-uuid)]
-      (do (sql/create-team tx {:team-id team-id :name name :description description})
+      (do (sql/create-team tx {:team-id     team-id
+                               :name        (team-name name)
+                               :description description})
           (sql/add-account-to-team tx {:account-id account-id :team-id team-id})))))
 

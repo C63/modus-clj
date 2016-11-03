@@ -1,5 +1,6 @@
 (ns modus.back.account
   (:require [modus.back.db.accounts :as sql]
+            [modus.back.team :as team]
             [modus.system.db-connection :refer [datasource is-unique-violation? query-response]]
             [modus.misc.util :refer [map->kebab-case truncate]]))
 
@@ -8,10 +9,11 @@
   (truncate name 100))
 
 (defn create-account! [db-conn name email password]
-  (->> {:email email :name (account-name name) :password password}
-       (sql/create-account (datasource db-conn))
-       query-response
-       :account-id))
+  (when-let [account-id (->> {:email email :name (account-name name) :password password}
+                             (sql/create-account (datasource db-conn))
+                             query-response
+                             :account-id)]
+    (team/create-team db-conn account-id "personal" nil)))
 
 (defn valid-password? [db-conn account-id password]
   (->> {:account-id account-id
