@@ -1,6 +1,6 @@
 -- :name create-team :< :!
-insert into team (name, team_description)
-values (:name, :description)
+insert into team (team_id, name, team_description)
+values (:team-id, :name, :description)
 returning team_id;
 
 -- :name add-account-to-team :!

@@ -1,6 +1,6 @@
 -- :name create-projects :< :!
-insert into project (team_id, name, project_description)
-values (:team-id, :name, :description)
+insert into project (project_id, team_id, name, project_description)
+values (:project-id, :team-id, :name, :description)
 returning project_id;
 
 -- :name add-account-to-project :!

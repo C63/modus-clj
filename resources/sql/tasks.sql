@@ -1,11 +1,11 @@
 -- :name create-task-list :< :!
-insert into task_list (project_id, name, task_list_description)
-values (:project-id, :name, :description)
+insert into task_list (task_list_id, project_id, name, task_list_description)
+values (:task-list-id, :project-id, :name, :description)
 returning task_list_id;
 
 -- :name create-tasks :< :!
-insert into task (task_list_id, name, task_description)
-values (:task-list-id, :name, :description)
+insert into task (task_id, task_list_id, name, task_description)
+values (:task-id, :task-list-id, :name, :description)
 returning task_id;
 
 -- :name add-account-to-task :!

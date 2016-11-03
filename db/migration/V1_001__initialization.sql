@@ -8,8 +8,6 @@ $$ language 'plpgsql';
 
 create extension if not exists pgcrypto;
 
-create extension if not exists "uuid-ossp";
-
 -- alias: a
 create table account (
   account_id bigserial primary key,
@@ -31,7 +29,7 @@ execute procedure update_modified_at();
 
 -- alias: t
 create table team (
-  team_id uuid primary key default uuid_generate_v4(),
+  team_id uuid primary key,
   name varchar(100) not null,
   team_description varchar(254),
   enabled boolean not null default true,
@@ -46,7 +44,7 @@ execute procedure update_modified_at();
 
 -- alias: p
 create table project (
-  project_id uuid primary key default uuid_generate_v4(),
+  project_id uuid primary key,
   team_id uuid references team (team_id) not null,
   name varchar(100) not null,
   project_description varchar(254),
@@ -62,7 +60,7 @@ execute procedure update_modified_at();
 
 -- alias: tsklst
 create table task_list (
-  task_list_id uuid primary key default uuid_generate_v4(),
+  task_list_id uuid primary key,
   project_id uuid references project (project_id) not null,
   name varchar(100) not null,
   task_list_description varchar(254),
@@ -78,7 +76,7 @@ execute procedure update_modified_at();
 
 -- alias: tsk
 create table task (
-  task_id uuid primary key default uuid_generate_v4(),
+  task_id uuid primary key,
   task_list_id uuid references task_list (task_list_id) not null,
   name varchar(100) not null,
   task_description varchar(254),
