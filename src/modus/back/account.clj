@@ -31,3 +31,7 @@
 
 (defn update-account-email [db-conn account-id email]
   (sql/update-account-email (datasource db-conn) {:account-id account-id :email email}))
+
+(defn email-login [db-conn email password]
+  (when-let [account-id (:account_id (sql/find-account-by-email (datasource db-conn) {:email email}))]
+    (valid-password? db-conn account-id password)))

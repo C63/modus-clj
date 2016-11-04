@@ -33,3 +33,8 @@ where account_id = :account-id;
 update account
 set enabled = :enabled
 where account_id = :account-id;
+
+-- :name find-account-by-email :? :1
+select account_id from account
+where email = :email;
+
