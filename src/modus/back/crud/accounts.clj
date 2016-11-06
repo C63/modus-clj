@@ -31,4 +31,4 @@
 
 (defn email-login [ds email password]
   (when-let [account-id (:account_id (sql/find-account-by-email ds {:email email}))]
-    (valid-password? db-conn account-id password)))
+    (valid-password? ds account-id password)))

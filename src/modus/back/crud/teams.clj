@@ -15,4 +15,4 @@
   (sql/add-account-to-team ds {:account-id account-id :team-id team-id}))
 
 (defn remove-account-from-team [ds account-id team-id]
-  (sql/remove-account-fro-team ds {:account-id account-id :team-id team-id}))
+  (sql/remove-account-from-team ds {:account-id account-id :team-id team-id}))

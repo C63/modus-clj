@@ -1,16 +1,16 @@
 (ns modus.back.account
   (:require [modus.back.crud.accounts :as accounts-crud]
             [modus.back.crud.teams :as teams-crud]
+            [modus.back.authenticator :as authenticator]
             [modus.system.db-connection :refer [datasource]]
             [clojure.java.jdbc :refer [with-db-transaction]]))
 
 (defn create-account! [db-conn name email password]
-  (with-db-transaction
-    (let [tx (datasource db-conn)]
-      (when-let [account-id (accounts-crud/create-account tx name email password)
-                 team-id (teams-crud/create-team tx "personal" nil)
-                 _ (teams-crud/add-account-to-team tx account-id team-id)]
-        (modus.back.authenticator/generate-access-token)))))
+  (with-db-transaction [tx (datasource db-conn)]
+                       (let [account-id (accounts-crud/create-account tx name email password)
+                             team-id (teams-crud/create-team tx "personal" nil)]
+                         (when (teams-crud/add-account-to-team tx account-id team-id)
+                           (authenticator/generate-access-token)))))
 
 (defn valid-password? [db-conn account-id password]
   (accounts-crud/valid-password? (datasource db-conn) account-id password))
@@ -26,4 +26,4 @@
 
 (defn email-login [db-conn email password]
   (when (accounts-crud/email-login (datasource db-conn) email password)
-    (modus.back.authenticator/generate-access-token)))
+    (authenticator/generate-access-token)))
