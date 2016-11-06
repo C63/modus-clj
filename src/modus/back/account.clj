@@ -1,16 +1,24 @@
 (ns modus.back.account
   (:require [modus.back.crud.accounts :as accounts-crud]
             [modus.back.crud.teams :as teams-crud]
-            [modus.back.authenticator :as authenticator]
+            [buddy.sign.jwt :as jwt]
             [modus.system.db-connection :refer [datasource]]
-            [clojure.java.jdbc :refer [with-db-transaction]]))
+            [clojure.java.jdbc :refer [with-db-transaction]]
+            [modus.misc.config :as config]
+            [clojure.string :as str]))
+
+(defn- generate-token [account-id]
+  (jwt/sign {:account-id account-id} config/sign-in-secret))
 
 (defn create-account! [db-conn name email password]
-  (with-db-transaction [tx (datasource db-conn)]
-                       (let [account-id (accounts-crud/create-account tx name email password)
-                             team-id (teams-crud/create-team tx "personal" nil)]
-                         (when (teams-crud/add-account-to-team tx account-id team-id)
-                           (authenticator/generate-access-token)))))
+  (with-db-transaction
+    [tx (datasource db-conn)]
+    (if (:account-id (accounts-crud/find-account-by-email tx email))
+      {:success? false :reason "Account with that email already existed"}
+      (let [account-id (accounts-crud/create-account tx name email password)
+            team-id (teams-crud/create-team tx "personal" nil)]
+        (when (teams-crud/add-account-to-team tx account-id team-id)
+          {:success? true :body (generate-token account-id)})))))
 
 (defn valid-password? [db-conn account-id password]
   (accounts-crud/valid-password? (datasource db-conn) account-id password))
@@ -25,5 +33,14 @@
   (accounts-crud/update-account-email (datasource db-conn) account-id email))
 
 (defn email-login [db-conn email password]
-  (when (accounts-crud/email-login (datasource db-conn) email password)
-    (authenticator/generate-access-token)))
+  (when-let [account-id (accounts-crud/email-login (datasource db-conn) email password)]
+    (generate-token account-id)))
+
+(defn get-account-credential-fn [db-conn]
+  (fn [email]
+    (let [trim-email (str/trim email)
+          credentials (accounts-crud/find-account-by-email (datasource db-conn) trim-email)]
+      (prn credentials)
+      (if (:account-id credentials)
+        credentials
+        nil))))

@@ -10,3 +10,6 @@
       (Boolean/parseBoolean)))
 
 (def listen-port (int-system-property "LISTEN_PORT" 8080))
+
+(def sign-in-secret "modus-c63-sign-in-secret-need-to-change-to-better-secret")
+

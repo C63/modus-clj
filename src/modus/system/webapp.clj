@@ -6,8 +6,8 @@
             [buddy.auth.middleware :refer [wrap-authorization]]
             [ring.middleware.json :refer [wrap-json-body]]
             [ring.util.response :as ring]
-            [modus.api.webapp :refer [create-api-routes]]
-            [modus.system.authenticator :refer [basic-auth-backend]]))
+            [modus.system.authenticator :refer [wrap-authenticate-api-user-using-buddy]]
+            [modus.api.webapp :refer [create-api-routes]]))
 
 (defn- create-routes [api-routes]
   (routes
@@ -15,11 +15,11 @@
     (ANY "*" []
       (ring/not-found "Not found"))))
 
-(defn create-app [api-web-app]
+(defn create-app [db-conn api-web-app]
   (create-routes
     (-> (create-api-routes api-web-app)
+        (wrap-authenticate-api-user-using-buddy db-conn)
         (wrap-json-body {:keywords? true :bigdecimals? true})
-        (wrap-authorization basic-auth-backend)
         (wrap-restful-response)
         (wrap-defaults api-defaults))))
 
@@ -27,7 +27,7 @@
   component/Lifecycle
 
   (start [component]
-    (assoc component :routes (create-app api-web-app)))
+    (assoc component :routes (create-app db-conn api-web-app)))
   (stop [component]
     (assoc component :routes nil)))
 

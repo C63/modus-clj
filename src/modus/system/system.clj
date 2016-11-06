@@ -13,7 +13,7 @@
                    [:db-conn])
     :web-app (component/using
                (new-webapp)
-               [:api-web-app])
+               [:db-conn :api-web-app])
     :http-kit (component/using
                 (create-http-kit-server)
                 [:web-app])))

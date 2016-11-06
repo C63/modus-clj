@@ -6,7 +6,7 @@
   (crud/create-task-list (datasource db-conn) project-id name description))
 
 (defn create-task [db-conn task-list-id name description]
-  (crud/create-task (datasource db-conn) project-id name description))
+  (crud/create-task (datasource db-conn) task-list-id name description))
 
 (defn add-account-to-task-list [db-conn account-id task-list-id]
   (crud/add-account-to-task-list (datasource db-conn) account-id task-list-id))
