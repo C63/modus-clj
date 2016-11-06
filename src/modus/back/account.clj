@@ -1,7 +1,8 @@
 (ns modus.back.account
   (:require [modus.back.db.accounts :as sql]
             [modus.back.team :as team]
-            [modus.system.db-connection :refer [datasource is-unique-violation? query-response]]
+            [modus.system.db-connection :refer [datasource query-response]]
+            [modus.misc.db :refer [is-unique-violation?]]
             [modus.misc.util :refer [map->kebab-case truncate]]))
 
 (defn- account-name
