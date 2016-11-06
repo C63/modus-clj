@@ -1,3 +1,3 @@
 (ns modus.back.authenticator)
 
-(defn generate-access-token {:access-token "test"})
+(defn generate-access-token [] {:access-token "test"})

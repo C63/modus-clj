@@ -3,9 +3,11 @@
             [compojure.core :refer [ANY GET routes context]]
             [ring.middleware.defaults :refer [api-defaults wrap-defaults]]
             [ring.middleware.format-response :refer [wrap-restful-response]]
+            [buddy.auth.middleware :refer [wrap-authorization]]
             [ring.middleware.json :refer [wrap-json-body]]
             [ring.util.response :as ring]
-            [modus.api.webapp :refer [create-api-routes]]))
+            [modus.api.webapp :refer [create-api-routes]]
+            [modus.system.authenticator :refer [basic-auth-backend]]))
 
 (defn- create-routes [api-routes]
   (routes
@@ -17,6 +19,7 @@
   (create-routes
     (-> (create-api-routes api-web-app)
         (wrap-json-body {:keywords? true :bigdecimals? true})
+        (wrap-authorization basic-auth-backend)
         (wrap-restful-response)
         (wrap-defaults api-defaults))))
 
