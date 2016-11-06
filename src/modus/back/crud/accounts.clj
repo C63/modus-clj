@@ -1,7 +1,6 @@
 (ns modus.back.crud.accounts
   (:require [modus.back.db.accounts :as sql]
-            [modus.system.db-connection :refer [query-response]]
-            [modus.misc.util :refer [truncate]]))
+            [modus.misc.util :refer [truncate query-response]]))
 
 (defn- account-name
   [name]

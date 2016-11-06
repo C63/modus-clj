@@ -67,3 +67,8 @@
 (defn truncate [s max-length]
   (when s
     (subs s 0 (min max-length (count s)))))
+
+(defn query-response [query-result]
+  (when query-result
+    (into {} (for [[k v] query-result]
+               [(->kebab-case k) v]))))

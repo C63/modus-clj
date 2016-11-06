@@ -1,12 +1,10 @@
--- :name create-task-list :< :!
+-- :name create-task-list :!
 insert into task_list (task_list_id, project_id, name, task_list_description)
-values (:task-list-id, :project-id, :name, :description)
-returning task_list_id;
+values (:task-list-id, :project-id, :name, :description);
 
--- :name create-tasks :< :!
+-- :name create-task :!
 insert into task (task_id, task_list_id, name, task_description)
-values (:task-id, :task-list-id, :name, :description)
-returning task_id;
+values (:task-id, :task-list-id, :name, :description);
 
 -- :name add-account-to-task :!
 insert into account_task (account_id, task_id)

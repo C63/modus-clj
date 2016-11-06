@@ -30,11 +30,6 @@
 
 (defn datasource [db] (:singleton-datasource db))
 
-(defn query-response [query-result]
-  (when query-result
-    (into {} (for [[k v] query-result]
-               [(->kebab-case k) v]))))
-
 (defrecord DBConnections [singleton-datasource]
   component/Lifecycle
 
