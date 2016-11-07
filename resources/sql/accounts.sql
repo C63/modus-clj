@@ -26,7 +26,7 @@ where account_id = :account-id and password_hash = crypt(:password, password_has
 
 -- :name change-password-hash :!
 update account
-set password_hash = crypt(:new - password, gen_salt('bf'))
+set password_hash = crypt(:new-password, gen_salt('bf'))
 where account_id = :account-id;
 
 -- :name set-enabled :!

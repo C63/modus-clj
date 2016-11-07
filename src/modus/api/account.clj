@@ -54,4 +54,18 @@
             (resp/forbidden "Permission denied")
             (resp/unauthorized "Unauthorized"))
           )))
+    (PUT "/:id/password" [:as req]
+      (let [{{:keys [id]} :params} req
+            {{:keys [new-password old-password]} :body} req
+            account-id (str->int id)
+            auth-account-id (api-common/authenticated-id req)]
+        (if (= auth-account-id account-id)
+          (if (accounts/valid-password? db-conn account-id old-password)
+            (when (accounts/change-password db-conn account-id new-password)
+              (resp/no-content))
+            (resp/bad-request "Password is not correct!"))
+          (if auth-account-id
+            (resp/forbidden "Permission denied")
+            (resp/unauthorized "Unauthorized"))
+          )))
     ))

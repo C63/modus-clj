@@ -15,10 +15,9 @@
     [tx (datasource db-conn)]
     (if (:account-id (accounts-crud/find-account-by-email tx email))
       {:success? false :reason "Account with that email already existed"}
-      (let [account-id (accounts-crud/create-account tx name email password)
-            team-id (teams-crud/create-team tx "personal" nil)]
-        (when (teams-crud/add-account-to-team tx account-id team-id)
-          {:success? true :body (generate-token account-id)})))))
+      (when-let [account-id (accounts-crud/create-account tx name email password)]
+        (do (teams-crud/create-team tx account-id "personal" nil)
+            {:success? true :body (generate-token account-id)})))))
 
 (defn valid-password? [db-conn account-id password]
   (accounts-crud/valid-password? (datasource db-conn) account-id password))

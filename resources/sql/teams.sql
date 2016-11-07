@@ -24,3 +24,10 @@ where team_id = :team-id;
 update team
 set name = :name
 where team_id = :team-id;
+
+-- :name get-teams-by-account-id :? :*
+select team_id, team.name, team_description
+from team join account_team using (team_id)
+          join account using (account_id)
+where account_id = :account-id
+  and team.enabled = true;
