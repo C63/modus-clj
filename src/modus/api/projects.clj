@@ -42,7 +42,7 @@
                 (resp/no-content))
               (resp/forbidden "Permission denied!")
               )))
-        (DELETE "/:team-id/accounts" [:as req]
+        (DELETE "/:project-id/accounts" [:as req]
           (let [auth-id (api-common/authenticated-id req)
                 {{project-id :project-id} :params} req
                 {{:keys [account-id]} :body} req
