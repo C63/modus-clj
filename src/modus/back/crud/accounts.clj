@@ -36,3 +36,7 @@
 
 (defn find-account-by-email [ds email]
   (query-response (sql/find-account-by-email ds {:email email})))
+
+
+(defn find-account-by-id [ds account-id]
+  (query-response (sql/find-account-by-id ds {:account-id account-id})))

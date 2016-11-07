@@ -44,3 +44,6 @@
       (if (:account-id credentials)
         credentials
         nil))))
+
+(defn get-account-by-id [db-conn account-id]
+  (accounts-crud/find-account-by-id (datasource db-conn) account-id))

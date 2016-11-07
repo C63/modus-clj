@@ -38,3 +38,6 @@ where account_id = :account-id;
 select account_id, password_hash as password, name from account
 where lower(email) = lower(:email) and enabled = true ;
 
+-- :name find-account-by-id :? :1
+select account_id, email, name from account
+where account_id = :account-id and enabled = true ;
