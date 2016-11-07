@@ -11,13 +11,11 @@
   (jwt/sign {:account-id account-id} config/sign-in-secret))
 
 (defn create-account! [db-conn name email password]
-  (with-db-transaction
-    [tx (datasource db-conn)]
-    (if (:account-id (accounts-crud/find-account-by-email tx email))
+  (let [ds (datasource db-conn)]
+    (if (:account-id (accounts-crud/find-account-by-email ds email))
       {:success? false :reason "Account with that email already existed"}
-      (when-let [account-id (accounts-crud/create-account tx name email password)]
-        (do (teams-crud/create-team tx account-id "personal" nil)
-            {:success? true :body (generate-token account-id)})))))
+      (when-let [account-id (accounts-crud/create-account ds name email password)]
+        {:success? true :body (generate-token account-id)}))))
 
 (defn valid-password? [db-conn account-id password]
   (accounts-crud/valid-password? (datasource db-conn) account-id password))
