@@ -20,9 +20,10 @@ update team
 set enabled = :enabled
 where team_id = :team-id;
 
--- :name update-team-name :!
+-- :name update-team :!
 update team
-set name = :name
+set team_description = COALESCE(:description, team_description),
+    name = COALESCE(:name, name)
 where team_id = :team-id;
 
 -- :name get-teams-by-account-id :? :*
@@ -31,3 +32,10 @@ from team join account_team using (team_id)
           join account using (account_id)
 where account_id = :account-id
   and team.enabled = true;
+
+-- :name check-relationship-account-team :? :1
+select count(account_id) as relationship_count
+from account_team join account using (account_id)
+where account_team.account_id = :account-id
+  and account_team.team_id = :team-id
+  and account.enabled = true ;

@@ -16,3 +16,9 @@
 
 (defn get-teams-by-account-id [db-conn account-id]
   (crud/get-teams-by-account-id (datasource db-conn) account-id))
+
+(defn check-relationship-account-team [db-conn account-id team-id]
+  (crud/check-relationship-account-team (datasource db-conn) account-id team-id))
+
+(defn update-team [db-conn team-id name description]
+  (crud/update-team (datasource db-conn) team-id name description))

@@ -21,3 +21,12 @@
 
 (defn get-teams-by-account-id [ds account-id]
   (map query-response (sql/get-teams-by-account-id ds {:account-id account-id})))
+
+(defn check-relationship-account-team [ds account-id team-id]
+  (->> {:account-id account-id :team-id team-id}
+       (sql/check-relationship-account-team ds)
+       :relationship_count
+       (= 1)))
+
+(defn update-team [ds team-id name description]
+  (sql/update-team ds {:team-id team-id :name name :description description}))
