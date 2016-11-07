@@ -45,7 +45,7 @@ execute procedure update_modified_at();
 -- alias: p
 create table project (
   project_id uuid primary key,
-  team_id uuid references team (team_id) not null,
+  team_id uuid references team (team_id),
   name varchar(100) not null,
   project_description varchar(254),
   enabled boolean not null default true,

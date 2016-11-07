@@ -15,9 +15,11 @@
       (resp/ok (api-common/authenticated-id req)))
     (POST "/register" [:as req]
       (let [{{:keys [name email password]} :body} req]
+        (prn name email password)
         (when-let [response (accounts/create-account! db-conn name email password)]
+          (prn response)
           (if (:success? response)
-            (resp/created {:access-token (:body response)})
+            (resp/ok {:access-token (:body response)})
             (resp/bad-request {:exception (:reason response)})))))
     (POST "/get-token" [:as req]
       (let [{{:keys [email password]} :body} req]

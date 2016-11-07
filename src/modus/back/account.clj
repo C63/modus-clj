@@ -12,6 +12,7 @@
 
 (defn create-account! [db-conn name email password]
   (let [ds (datasource db-conn)]
+    (prn (accounts-crud/find-account-by-email ds email))
     (if (:account-id (accounts-crud/find-account-by-email ds email))
       {:success? false :reason "Account with that email already existed"}
       (when-let [account-id (accounts-crud/create-account ds name email password)]
