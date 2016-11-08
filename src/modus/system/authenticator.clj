@@ -46,4 +46,4 @@
   (fn [request]
     (if (auth/authenticated? request)
       (handler request)
-      (auth/throw-unauthorized))))
+      (ring.util.http-response/unauthorized "Unauthorized"))))

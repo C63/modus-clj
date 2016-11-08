@@ -1,73 +1,66 @@
 (ns modus.api.account
-  (:require [compojure.core :refer :all]
-            [clojure.tools.logging :as log]
+  (:require [compojure.api.sweet :refer :all]
             [modus.back.account :as accounts]
-            [modus.misc.api :as api-common]
             [modus.misc.util :refer [str->int]]
-            [modus.system.authenticator :as auth]
+            [ring.util.http-response :as resp]
             [schema.core :as s]
-            [ring.util.http-response :as resp]))
+            [modus.system.authenticator :as auth]
+            modus.system.restructure))
 
 (defn create-account-routes [db-conn]
+  :tags ["accounts"]
   (routes
-    (GET "/" req
+    (POST "/register" []
+      :body-params [name :- s/Str, email :- s/Str, password :- s/Str]
+      (when-let [response (accounts/create-account! db-conn name email password)]
+        (if (:success? response)
+          (resp/ok {:access-token (:body response)})
+          (resp/bad-request {:exception (:reason response)}))))
+
+    (POST "/get-token" []
+      :body-params [email :- s/Str, password :- s/Str]
+      (if-let [token (accounts/email-login db-conn email password)]
+        (resp/ok {:access-token token})
+        (resp/unauthorized "Unauthorized")))
+
+    (GET "/profile" []
       :middleware [#(auth/wrap-authorize %)]
-      (resp/ok (api-common/authenticated-id req)))
-    (POST "/register" [:as req]
-      (let [{{:keys [name email password]} :body} req]
-        (prn name email password)
-        (when-let [response (accounts/create-account! db-conn name email password)]
-          (prn response)
-          (if (:success? response)
-            (resp/ok {:access-token (:body response)})
-            (resp/bad-request {:exception (:reason response)})))))
-    (POST "/get-token" [:as req]
-      (let [{{:keys [email password]} :body} req]
-        (if-let [token (accounts/email-login db-conn email password)]
-          (resp/ok {:access-token token})
-          (resp/unauthorized "Unauthorized"))))
-    (GET "/:id" [:as req]
-      (let [{{id :id} :params} req
-            account (accounts/get-account-by-id db-conn (str->int id))]
-        (if account
-          (resp/ok account)
-          (resp/not-found "Account with that ID not found"))))
-    (PUT "/:id/name" [:as req]
-      (let [{{:keys [id]} :params} req
-            {{:keys [name]} :body} req
-            account-id (str->int id)
-            auth-account-id (api-common/authenticated-id req)]
-        (if (= auth-account-id account-id)
+      :auth-account auth-account
+      (if-let [account (accounts/get-account-by-id db-conn (:account-id auth-account))]
+        (resp/ok account)
+        (resp/not-found "Account with that ID not found")))
+
+    (PUT "/:account-id/name" []
+      :path-params [account-id :- s/Int]
+      :middleware [auth/wrap-authorize]
+      :body-params [name :- s/Str]
+      :auth-account auth-account
+      (let [auth-id (:account-id auth-account)]
+        (if (= auth-id account-id)
           (when (accounts/update-account-name db-conn account-id name)
             (resp/no-content))
-          (if auth-account-id
-            (resp/forbidden "Permission denied")
-            (resp/unauthorized "Unauthorized"))
-          )))
-    (PUT "/:id/email" [:as req]
-      (let [{{:keys [id]} :params} req
-            {{:keys [email]} :body} req
-            account-id (str->int id)
-            auth-account-id (api-common/authenticated-id req)]
-        (if (= auth-account-id account-id)
+          (resp/forbidden "Permission denied"))))
+
+    (PUT "/:account-id/email" []
+      :path-params [account-id :- s/Int]
+      :middleware [auth/wrap-authorize]
+      :body-params [email :- s/Str]
+      :auth-account auth-account
+      (let [auth-id (:account-id auth-account)]
+        (if (= auth-id account-id)
           (when (accounts/update-account-email db-conn account-id email)
             (resp/no-content))
-          (if auth-account-id
-            (resp/forbidden "Permission denied")
-            (resp/unauthorized "Unauthorized"))
-          )))
-    (PUT "/:id/password" [:as req]
-      (let [{{:keys [id]} :params} req
-            {{:keys [new-password old-password]} :body} req
-            account-id (str->int id)
-            auth-account-id (api-common/authenticated-id req)]
-        (if (= auth-account-id account-id)
+          (resp/forbidden "Permission denied"))))
+
+    (PUT "/:account-id/password" []
+      :path-params [account-id :- s/Int]
+      :middleware [auth/wrap-authorize]
+      :body-params [new-password :- s/Str, old-password :- s/Str]
+      :auth-account auth-account
+      (let [auth-id (:account-id auth-account)]
+        (if (= auth-id account-id)
           (if (accounts/valid-password? db-conn account-id old-password)
             (when (accounts/change-password db-conn account-id new-password)
               (resp/no-content))
             (resp/bad-request "Password is not correct!"))
-          (if auth-account-id
-            (resp/forbidden "Permission denied")
-            (resp/unauthorized "Unauthorized"))
-          )))
-    ))
+          (resp/forbidden "Permission denied"))))))

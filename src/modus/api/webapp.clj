@@ -1,5 +1,5 @@
 (ns modus.api.webapp
-  (:require [compojure.core :refer [routes context GET ANY]]
+  (:require [compojure.api.sweet :refer :all]
             [ring.util.http-response :refer :all]
             [modus.api.account :as account-api]
             [modus.api.teams :as team-api]
