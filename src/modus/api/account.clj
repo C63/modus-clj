@@ -8,10 +8,10 @@
             modus.system.restructure))
 
 (defn create-account-routes [db-conn]
-  :tags ["accounts"]
   (routes
     (POST "/register" []
       :body-params [name :- s/Str, email :- s/Str, password :- s/Str]
+      :summary "Register new account"
       (when-let [response (accounts/create-account! db-conn name email password)]
         (if (:success? response)
           (resp/ok {:access-token (:body response)})

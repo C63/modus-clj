@@ -9,47 +9,50 @@
 
 
 (defn create-team-routes [db-conn]
-  (-> (routes
-        (GET "/" []
-          :auth-account auth-account
-          (let [account-id (:account-id auth-account)]
-            (resp/ok (teams/get-teams-by-account-id db-conn account-id))))
+  (routes
+    (GET "/" []
+      :auth-account auth-account
+      :middleware [#(auth/wrap-authorize %)]
+      (let [account-id (:account-id auth-account)]
+        (resp/ok (teams/get-teams-by-account-id db-conn account-id))))
 
-        (POST "/" []
-          :body-params [name :- s/Str, description :- s/Str]
-          :auth-account auth-account
-          (let [account-id (:account-id auth-account)]
-            (teams/create-team db-conn account-id name description)
-            (resp/created)))
+    (POST "/" []
+      :middleware [#(auth/wrap-authorize %)]
+      :body-params [name :- s/Str, description :- s/Str]
+      :auth-account auth-account
+      (let [account-id (:account-id auth-account)]
+        (teams/create-team db-conn account-id name description)
+        (resp/created)))
 
-        (PUT "/:team-id" []
-          :path-params [team-id :- s/Uuid]
-          :body-params [name :- s/Str, description :- s/Str]
-          :auth-account auth-account
-          (let [account-id (:account-id auth-account)]
-            (if (teams/check-relationship-account-team db-conn account-id team-id)
-              (when (teams/update-team db-conn team-id name description)
-                (resp/no-content))
-              (resp/forbidden "Permission denied!"))))
+    (PUT "/:team-id" []
+      :middleware [#(auth/wrap-authorize %)]
+      :path-params [team-id :- s/Uuid]
+      :body-params [name :- s/Str, description :- s/Str]
+      :auth-account auth-account
+      (let [account-id (:account-id auth-account)]
+        (if (teams/check-relationship-account-team db-conn account-id team-id)
+          (when (teams/update-team db-conn team-id name description)
+            (resp/no-content))
+          (resp/forbidden "Permission denied!"))))
 
-        (POST "/:team-id/accounts" []
-          :path-params [team-id :- s/Uuid]
-          :body-params [account-id :- s/Int]
-          :auth-account auth-account
-          (let [auth-id (:account-id auth-account)]
-            (if (teams/check-relationship-account-team db-conn auth-id team-id)
-              (when (teams/add-account-to-team db-conn account-id team-id)
-                (resp/no-content))
-              (resp/forbidden "Permission denied!"))))
+    (POST "/:team-id/accounts" []
+      :middleware [#(auth/wrap-authorize %)]
+      :path-params [team-id :- s/Uuid]
+      :body-params [account-id :- s/Int]
+      :auth-account auth-account
+      (let [auth-id (:account-id auth-account)]
+        (if (teams/check-relationship-account-team db-conn auth-id team-id)
+          (when (teams/add-account-to-team db-conn account-id team-id)
+            (resp/no-content))
+          (resp/forbidden "Permission denied!"))))
 
-        (DELETE "/:team-id/accounts" []
-          :path-params [team-id :- s/Uuid]
-          :body-params [account-id :- s/Int]
-          :auth-account auth-account
-          (let [auth-id (:account-id auth-account)]
-            (if (teams/check-relationship-account-team db-conn auth-id team-id)
-              (when (teams/remove-account-from-team db-conn account-id team-id)
-                (resp/no-content))
-              (resp/forbidden "Permission denied!")))))
-
-      (auth/wrap-authorize)))
+    (DELETE "/:team-id/accounts" []
+      :middleware [#(auth/wrap-authorize %)]
+      :path-params [team-id :- s/Uuid]
+      :body-params [account-id :- s/Int]
+      :auth-account auth-account
+      (let [auth-id (:account-id auth-account)]
+        (if (teams/check-relationship-account-team db-conn auth-id team-id)
+          (when (teams/remove-account-from-team db-conn account-id team-id)
+            (resp/no-content))
+          (resp/forbidden "Permission denied!"))))))
