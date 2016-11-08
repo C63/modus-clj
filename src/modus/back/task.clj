@@ -14,10 +14,10 @@
 (defn remove-account-from-task-list [db-conn account-id task-list-id]
   (crud/remove-account-from-task-list (datasource db-conn) account-id task-list-id))
 
-(defn add-account-to-task-list [db-conn account-id task-id]
+(defn add-account-to-task [db-conn account-id task-id]
   (crud/add-account-to-task (datasource db-conn) account-id task-id))
 
-(defn remove-account-from-task-list [db-conn account-id task-id]
+(defn remove-account-from-task [db-conn account-id task-id]
   (crud/remove-account-from-task (datasource db-conn) account-id task-id))
 
 (defn get-task-list-by-project-id [db-conn project-id]
@@ -28,3 +28,12 @@
 
 (defn update-task-list [db-conn task-list-id name description]
   (crud/update-task-list (datasource db-conn) task-list-id name description))
+
+(defn get-task-by-task-list-id [db-conn task-list-id]
+  (crud/get-task-by-task-list-id (datasource db-conn) task-list-id))
+
+(defn get-task-by-id [db-conn task-id]
+  (crud/get-task-by-id (datasource db-conn) task-id))
+
+(defn update-task [db-conn task-id task-list-id name description]
+  (crud/update-task (datasource db-conn) task-id task-list-id name description))

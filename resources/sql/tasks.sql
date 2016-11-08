@@ -30,9 +30,9 @@ insert into account_task_list (account_id, task_list_id)
 
 -- :name remove-account-from-task-list :!
 delete from account_task_list
-where account_id = :account-id and task_list_id = :task-list-id
+where account_id = :account-id and task_list_id = :task-list-id;
 
--- :name get-task-list-by-project-id :!
+-- :name get-task-list-by-project-id :? :*
 select task_list_id, name, task_list_description
 from task_list
 where project_id = :project-id
@@ -45,4 +45,24 @@ set name = coalesce(:name, name),
 where task_list_id  = :task-list-id;
 
 -- :name get-task-list-by-id :? :1
-select * from task_list where task_list_id = :task-list-id;
+select task_list_id, project_id, name, task_list_description
+from task_list
+where task_list_id = :task-list-id;
+
+-- :name get-task-by-task-list-id :? :*
+select task_id, task_list_id, name, task_description
+from task
+where task_list_id = :task-list-id
+  and enabled = true;
+
+-- :name update-task :!
+update task
+set name = coalesce(:name, name),
+    task_description = coalesce(:description, task_description),
+    task_list_id = coalesce(:task-list-id, task_list_id)
+where task_id = :task-id;
+
+-- :name get-task-by-id :? :1
+select task_id, task_list_id, name, task_description
+from task
+where task_id = :task-id;

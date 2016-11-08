@@ -1,6 +1,7 @@
 (ns modus.back.crud.tasks
   (:require [modus.back.db.task :as sql]
-            [modus.misc.util :refer [truncate generate-uuid query-response]]))
+            [modus.misc.util :refer [truncate generate-uuid query-response
+                                     to-iat]]))
 
 (defn truncate-name [name] (truncate name 100))
 
@@ -42,3 +43,15 @@
   (sql/update-task-list ds {:task-list-id task-list-id
                             :name         name
                             :description  description}))
+
+(defn get-task-by-task-list-id [ds task-list-id]
+  (map query-response (sql/get-task-by-task-list-id ds {:task-list-id task-list-id})))
+
+(defn get-task-by-id [ds task-id]
+  (query-response (sql/get-task-by-id ds {:task-id task-id})))
+
+(defn update-task [ds task-id task-list-id name description]
+  (sql/update-task ds {:task-id      task-id
+                       :task-list-id task-list-id
+                       :name         name
+                       :description  description}))

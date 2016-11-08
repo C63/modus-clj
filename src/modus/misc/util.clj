@@ -1,6 +1,6 @@
 (ns modus.misc.util
   (:require [camel-snake-kebab.core :refer [->snake_case]]
-            [clojure.string :as str]
+            [clj-time.format :as time-format]
             [clojure.walk :refer [postwalk]])
   (:import (java.util UUID)
            (org.joda.time DateTime ReadableInstant)))
@@ -72,3 +72,19 @@
   (when query-result
     (into {} (for [[k v] query-result]
                [(->kebab-case k) v]))))
+
+(defn create-default-time-formatter
+  []
+  (time-format/formatter "yyyy-MM-dd'T'HH:mm:ss.SSSZ"))
+
+(defn format-timestamp [timestamp]
+  (when timestamp                                           ; nil would produce the current time below, it's better to return nil for nil.
+    (time-format/unparse (create-default-time-formatter) timestamp)))
+
+(defn parse-timestamp [s]
+  (when s                                                   ; nil would produce the current time below, it's better to return nil for nil.
+    (time-format/parse (create-default-time-formatter) s)))
+
+(defn to-iat [datetime]
+  (quot (.getMillis datetime) 100))
+

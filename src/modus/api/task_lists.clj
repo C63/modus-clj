@@ -14,8 +14,8 @@
                 project-id (str->uuid project-id)]
             (resp/ok (tasklist/get-task-list-by-project-id db-conn project-id))))
         (POST "/" [:as req]
-          (let [account-id (api-common/authenticated-id req)
-                {{:keys [name description project-id]} :body} req]
+          (let [{{:keys [name description project-id]} :body} req
+                project-id (str->uuid project-id)]
             (when-let [response (tasklist/create-task-list db-conn project-id name description)]
               (resp/created (str response)))))
         (GET "/:task-list-id" [:as req]
