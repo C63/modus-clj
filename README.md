@@ -9,6 +9,10 @@ modus monolith backend with clojure and postgres
 
 ## Usage
 
-* Want to recreate the whole database: ./bootstrap.sh
-* Want to run normally: ./run.sh
+* Recreate the whole database: ./bootstrap.sh (no longer run backend)
+* Migration and run backend: ./run.sh
+* Just wanna run the backend: lein run -m modus.main/-main
 * Dev: use repl - of course
+
+## API docs
+* locally: http://localhost:3000/api-docs
