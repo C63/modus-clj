@@ -2,7 +2,7 @@
 
 modus monolith backend with clojure and postgres
 
-## Installation (Instruction for Chi - or noob like Chi)
+## Installation 
 
 * Install postgres: http://postgresapp.com/
 * Install leiningen: http://leiningen.org/#install
@@ -15,4 +15,4 @@ modus monolith backend with clojure and postgres
 * Dev: use repl - of course
 
 ## API docs
-* locally: http://localhost:3000/api-docs
+* locally: http://localhost:8080/api-docs
