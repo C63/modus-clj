@@ -42,7 +42,7 @@
                                       [org.clojure/test.check "0.9.0"]]
                        :source-paths ["dev"]
                        :jvm-opts     ["-Dapple.awt.UIElement=true"
-                                      "-DLISTEN_PORT=3000"]
+                                      "-DLISTEN_PORT=8080"]
                        :flyway       {:url      "jdbc:postgresql://localhost:5432/modus"
                                       :user     ~(System/getProperty "user.name")
                                       :password ""}
