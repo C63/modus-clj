@@ -6,6 +6,7 @@
             [buddy.auth.middleware :refer [wrap-authorization]]
             [ring.middleware.json :refer [wrap-json-body]]
             [ring.util.response :as ring]
+            [ring.middleware.cors :refer [wrap-cors]]
             [modus.system.authenticator :refer [wrap-authenticate-api-user-using-buddy]]
             [modus.api.account :as account-api]
             [modus.api.teams :as team-api]
@@ -52,7 +53,9 @@
             (task-api/create-task-routes db-conn))
           (ANY "*" []
             (ring/not-found "Not found"))))
-      (wrap-authenticate-api-user-using-buddy db-conn)))
+      (wrap-authenticate-api-user-using-buddy db-conn)
+      (wrap-cors :access-control-allow-origin [#"*"]
+                 :access-control-allow-methods [:get :put :post :delete])))
 
 (defrecord WebApp [routes db-conn api-web-app]
   component/Lifecycle

@@ -19,6 +19,7 @@
                  [clj-http "3.3.0"
                   :exclusions [org.apache.httpcomponents/httpcore]]
                  [ring-middleware-format "0.7.0"]
+                 [ring-cors "0.1.8"]
                  [cheshire "5.6.3"]
                  [metosin/compojure-api "1.1.9"]
                  [com.layerware/hugsql "0.4.7"]
