@@ -54,7 +54,7 @@
           (ANY "*" []
             (ring/not-found "Not found"))))
       (wrap-authenticate-api-user-using-buddy db-conn)
-      (wrap-cors :access-control-allow-origin [#"*"]
+      (wrap-cors :access-control-allow-origin [#".+"]
                  :access-control-allow-methods [:get :put :post :delete])))
 
 (defrecord WebApp [routes db-conn api-web-app]
