@@ -8,7 +8,7 @@ create table comment (
   account_id bigint references account(account_id),
   content text,
   created_at timestamp with time zone not null default (current_timestamp),
-  modified_at timestamp with time zone
+  modified_at timestamp with time zone not null default (current_timestamp)
 );
 
 create trigger comment_modified_at_trigger

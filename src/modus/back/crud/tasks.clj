@@ -1,7 +1,8 @@
 (ns modus.back.crud.tasks
   (:require [modus.back.db.task :as sql]
             [modus.misc.util :refer [truncate generate-uuid query-response
-                                     to-iat]]))
+                                     to-iat]]
+            [modus.misc.db :refer [pg-enum]]))
 
 (defn truncate-name [name] (truncate name 100))
 
@@ -50,8 +51,15 @@
 (defn get-task-by-id [ds task-id]
   (query-response (sql/get-task-by-id ds {:task-id task-id})))
 
-(defn update-task [ds task-id task-list-id name description]
+(defn update-task [ds task-id task-list-id task-name description status]
   (sql/update-task ds {:task-id      task-id
                        :task-list-id task-list-id
-                       :name         name
-                       :description  description}))
+                       :name         task-name
+                       :description  description
+                       :status (pg-enum (name status))}))
+
+(defn get-comment-by-task-id [ds task-id]
+  (map query-response (sql/get-comment-by-task-id ds {:task-id task-id})))
+
+(defn create-comment-for-task [ds task-id account-id content]
+  (sql/create-comment-for-task ds {:task-id task-id :account-id account-id :content content}))

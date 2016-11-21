@@ -50,7 +50,7 @@ from task_list
 where task_list_id = :task-list-id;
 
 -- :name get-task-by-task-list-id :? :*
-select task_id, task_list_id, name, task_description
+select task_id, task_list_id, name, task_description, status
 from task
 where task_list_id = :task-list-id
   and enabled = true;
@@ -59,10 +59,21 @@ where task_list_id = :task-list-id
 update task
 set name = coalesce(:name, name),
     task_description = coalesce(:description, task_description),
-    task_list_id = coalesce(:task-list-id, task_list_id)
+    task_list_id = coalesce(:task-list-id, task_list_id),
+    status = coalesce(:status, status)
 where task_id = :task-id;
 
 -- :name get-task-by-id :? :1
-select task_id, task_list_id, name, task_description
+select task_id, task_list_id, name, task_description, status
 from task
 where task_id = :task-id;
+
+-- :name create-comment-for-task :!
+insert into comment (task_id, account_id, content)
+values (:task-id, :account-id, :content);
+
+-- :name get-comment-by-task-id :? :*
+select comment_id, account.name, content, comment.created_at, comment.modified_at
+from comment join account using(account_id)
+where task_id = :task-id
+order by comment.created_at;

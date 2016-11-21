@@ -30,8 +30,8 @@
     (PUT "/:task-id" []
       :middleware [#(auth/wrap-authorize %)]
       :path-params [task-id :- s/Uuid]
-      :body-params [name :- s/Str, description :- s/Str, task-list-id :- s/Uuid]
-      (task/update-task db-conn task-id task-list-id name description)
+      :body-params [name :- s/Str, description :- s/Str, task-list-id :- s/Uuid, status :- s/Str]
+      (task/update-task db-conn task-id task-list-id name description status)
       (resp/no-content))
 
     (POST "/:task-id/accounts" []
@@ -46,6 +46,13 @@
       :path-params [task-id :- s/Uuid]
       :body-params [account-id :- s/Int]
       (task/remove-account-from-task db-conn account-id task-id)
-      (resp/no-content))))
+      (resp/no-content))
+
+    (POST "/:task-id/comments" []
+      :middleware [#(auth/wrap-authorize %)]
+      :path-params [task-id :- s/Uuid]
+      :body-params [account-id :- s/Int content :- s/Str]
+      (task/create-comment db-conn task-id account-id content)
+      )))
 
 

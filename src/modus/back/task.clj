@@ -33,7 +33,12 @@
   (crud/get-task-by-task-list-id (datasource db-conn) task-list-id))
 
 (defn get-task-by-id [db-conn task-id]
-  (crud/get-task-by-id (datasource db-conn) task-id))
+  (let [ds (datasource db-conn)]
+    (-> (crud/get-task-by-id ds task-id)
+        (assoc :comments (crud/get-comment-by-task-id ds task-id)))))
 
-(defn update-task [db-conn task-id task-list-id name description]
-  (crud/update-task (datasource db-conn) task-id task-list-id name description))
+(defn update-task [db-conn task-id task-list-id name description status]
+  (crud/update-task (datasource db-conn) task-id task-list-id name description status))
+
+(defn create-comment [db-conn task-id account-id content]
+  (crud/create-comment-for-task (datasource db-conn) task-id account-id content))
