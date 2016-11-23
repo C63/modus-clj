@@ -48,6 +48,10 @@
                                       :user     ~(System/getProperty "user.name")
                                       :password ""}
                        }
+             :dev_sb  {:jvm-opts ["-DLISTEN_PORT=8080"]
+                       :flyway   {:url      "jdbc:postgresql://modus-monolith-c63-dev.c8epalgxmd5k.eu-central-1.rds.amazonaws.com:5432/modus_dev"
+                                  :user     "modus_c63_dev"
+                                  :password "modus-c63-dev"}}
              :uberjar {:aot :all}
              }
   )
