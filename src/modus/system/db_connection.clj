@@ -23,12 +23,10 @@
 
 (defn psql-db-properties
   []
-  (let [t {:url           (str "jdbc:postgresql:" (System/getProperty "DB_CONNSTR" "//localhost:5432/modus"))
-           :username      (System/getProperty "DB_USERNAME" (System/getProperty "user.name"))
-           :password      (System/getProperty "DB_PASSWORD" "")
-           :max-pool-size (int-system-property "DB_MAX_POOL_SIZE" 10)}]
-    (prn t)
-    t))
+  {:url           (str "jdbc:postgresql:" (System/getProperty "DB_CONNSTR" "//localhost:5432/modus"))
+   :username      (System/getProperty "DB_USERNAME" (System/getProperty "user.name"))
+   :password      (System/getProperty "DB_PASSWORD" "")
+   :max-pool-size (int-system-property "DB_MAX_POOL_SIZE" 10)})
 
 (defn datasource [db] (:singleton-datasource db))
 
