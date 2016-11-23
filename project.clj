@@ -34,6 +34,8 @@
              :exclusions [org.clojure/clojure]]
             [lein-environ "1.1.0"]
             [lein-licenses "0.2.0"]]
+  :main modus.main
+  :aot [modus.main]
   :flyway {:driver    "org.postgresql.Driver"
            :locations ["filesystem:./db/migration"]}
   :profiles {:repl    {:plugins [[cider/cider-nrepl "0.13.0"]]}
