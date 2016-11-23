@@ -6,12 +6,11 @@ dependencies:
   override:
     - lein with-profile dev_sb uberjar
     - docker info
-    - docker build --rm=false -t modus-monolith-clj-api .
+    - docker build --rm=false -t buiduytung/modus-monolith-clj:1.0 .
 
 deployment:
   hub:
     branch: master
     commands:
-      - docker login --email=tung.buiduy.91@gmail.com --username=TungTo --password=dc2994e5-26b3-4a53-99fa-d72fece3a3cc registry.heroku.com
-      - docker tag modus-monolith-clj-api registry.heroku.com/modus-monolith-api
-      - docker push registry.heroku.com/modus-monolith-api
+      - docker login --username=buiduytung --password=metropolia2012
+      - docker push buiduytung/modus-monolith-clj:1.0
