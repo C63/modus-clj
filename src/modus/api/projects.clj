@@ -11,7 +11,7 @@
   (routes
     (GET "/" []
       :middleware [#(auth/wrap-authorize %)]
-      :query-params [team-id :- s/Uuid]
+      :query-params [team-id :- s/Uuid nil]
       :auth-account auth-account
       (let [account-id (:account-id auth-account)]
         (-> (if team-id
